@@ -129,6 +129,7 @@ namespace aggaschack
     {
         private int activePlayerIndex;
         public readonly int BoardSize = 3;
+        private readonly BoardChecker boardChecker;
 
         public Match(Player playerOne, Player playerTwo)
         {
@@ -136,6 +137,7 @@ namespace aggaschack
             activePlayerIndex = RandomizerFunction();
             
             Board = Enumerable.Range(0, BoardSize * BoardSize).Select(i => new Square()).ToList();
+            boardChecker = new BoardChecker(BoardSize);
         }
 
         internal Match(Player playerOne, Player playerTwo, List<Square> board) : this(playerOne, playerTwo)
@@ -166,14 +168,12 @@ namespace aggaschack
             var square = Board[yCoord * BoardSize + xCoord];
             square.UpdateState(move);
 
-            //Check ranks
-            var boardChecker = new BoardChecker(BoardSize);
-            var won = boardChecker.CheckRanks(Board);
+            var won = boardChecker.CheckBoard(Board);
             if (won) {
                 Finished = true;
                 Winner = player;
             }
-            
+
             activePlayerIndex = activePlayerIndex == 1 ? 0 : 1;
         }
 
