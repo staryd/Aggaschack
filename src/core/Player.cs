@@ -2,11 +2,11 @@ namespace Äggaschack.Core
 {
     public class Player
     {
-        private string name;
+        public string Name { get; }
 
         public Player(string name)
         {
-            this.name = name;
+            Name = name;
         }
     }
 }

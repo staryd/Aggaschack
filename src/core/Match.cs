@@ -28,7 +28,8 @@ namespace Äggaschack.Core
 
         public IReadOnlyList<Player> Players { get; } 
 
-        internal Func<int> RandomizerFunction { get; set; } = () => new Random().Next(1);
+        private static readonly Random random = new Random();
+        internal Func<int> RandomizerFunction { get; set; } = () => random.Next(2);
 
         public Player ActivePlayer => Finished ? null : Players[activePlayerIndex];
 
