@@ -8,20 +8,19 @@ namespace Äggaschack.Core
 
     public class Match
     {
-        private int activePlayerIndex;
+        private int? activePlayerIndex;
         public readonly int BoardSize = 3;
         private readonly BoardChecker boardChecker;
 
         public Match(Player playerOne, Player playerTwo)
         {
             Players = new List<Player> { playerOne, playerTwo };
-            activePlayerIndex = RandomizerFunction();
             
             Board = Enumerable.Range(0, BoardSize * BoardSize).Select(i => new Square()).ToList();
             boardChecker = new BoardChecker(BoardSize);
         }
 
-        internal Match(Player playerOne, Player playerTwo, List<Square> board) : this(playerOne, playerTwo)
+        public Match(Player playerOne, Player playerTwo, List<Square> board) : this(playerOne, playerTwo)
         {
             Board = board;
         }
@@ -31,7 +30,11 @@ namespace Äggaschack.Core
         private static readonly Random random = new Random();
         internal Func<int> RandomizerFunction { get; set; } = () => random.Next(2);
 
-        public Player ActivePlayer => Finished ? null : Players[activePlayerIndex];
+        public Player ActivePlayer => Finished ? null : Players[activePlayerIndex ?? RandomizeActivePlayer()];
+        private int RandomizeActivePlayer() {
+            activePlayerIndex = RandomizerFunction();
+            return activePlayerIndex.Value;
+        }
 
         public IReadOnlyList<Square> Board { get; }
 
